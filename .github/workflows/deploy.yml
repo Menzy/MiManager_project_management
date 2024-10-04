@@ -36,5 +36,5 @@ jobs:
           ARGS: "-rltgoDzvO --delete"
           SOURCE: "dist/"
           REMOTE_HOST: "78.141.243.243"
-          REMOTE_USER: "your-username"
-          TARGET: "/path/to/your/deployment/directory"
+          REMOTE_USER: "root"
+          TARGET: "/var/www/MiManager_project_management/dist"
