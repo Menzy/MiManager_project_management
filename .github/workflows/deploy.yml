@@ -1,4 +1,4 @@
-name: CI/CD Pipeline
+name: Deploy Vite React App
 
 on:
   push:
@@ -10,47 +10,26 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Step 1: Checkout the repository code
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v2
 
-      # Step 2: Set up Node.js environment
       - name: Set up Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v2
         with:
-          node-version: '18'  # Change to the Node version you prefer
+          node-version: "18"
 
-      # Step 3: Install dependencies
       - name: Install dependencies
         run: npm install
 
-      # Step 4: Build the project
       - name: Build project
         run: npm run build
 
-      # Step 5: Debug - List all files in the project directory to verify build output
-      - name: Debug: List files in project directory
-        run: ls -al
-
-      # Step 6: Debug - List all files in the dist directory to verify build output
-      - name: Debug: List files in dist directory
-        run: ls -al dist
-
-  deploy:
-    runs-on: ubuntu-latest
-    needs: build
-
-    steps:
-      # Step 7: Prepare the SSH key for deployment
-      - name: Prepare SSH Key
+      - name: Deploy to server
+        uses: easingthemes/ssh-deploy@v2.1.5
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-        run: |
-          echo "$SSH_PRIVATE_KEY" > key.pem
-          chmod 600 key.pem
-
-      # Step 8: Deploy the contents of the dist folder to the server via SCP
-      - name: Deploy to VPS
-        run: |
-          scp -i key.pem -o StrictHostKeyChecking=no -r dist/* root@78.141.243.243:/var/www/MiManager_project_management/dist
-          rm key.pem
+          ARGS: "-rltgoDzvO --delete"
+          SOURCE: "dist/"
+          REMOTE_HOST: "78.141.243.243"
+          REMOTE_USER: "your-username"
+          TARGET: "/path/to/your/deployment/directory"
