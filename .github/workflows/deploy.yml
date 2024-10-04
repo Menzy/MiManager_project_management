@@ -31,9 +31,9 @@ jobs:
     steps:
       - name: Prepare SSH Key
         env:
-          SSH_PRIVATE_KEY_BASE64: ${{ secrets.SSH_PRIVATE_KEY_BASE64 }}
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
         run: |
-          echo "$SSH_PRIVATE_KEY_BASE64" | base64 -d | tr -d '\r' > key.pem
+          echo "$SSH_PRIVATE_KEY" > key.pem
           chmod 600 key.pem
 
       - name: Deploy to VPS
