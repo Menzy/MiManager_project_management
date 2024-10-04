@@ -29,6 +29,15 @@ jobs:
     needs: build
 
     steps:
+      # Step 1: Prepare SSH Key for Deployment
+      - name: Prepare SSH Key
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        run: |
+          printf "%s" "$SSH_PRIVATE_KEY" > key.pem
+          chmod 600 key.pem
+
+      # Step 2: Deploy to server
       - name: Deploy to server
         uses: easingthemes/ssh-deploy@v2.1.5
         env:
@@ -36,5 +45,5 @@ jobs:
           ARGS: "-rltgoDzvO --delete"
           SOURCE: "dist/"
           REMOTE_HOST: "78.141.243.243"
-          REMOTE_USER: "root"
+          REMOTE_USER: "root"  # Replace with your actual username if not root
           TARGET: "/var/www/MiManager_project_management/dist"
