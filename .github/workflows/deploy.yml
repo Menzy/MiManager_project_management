@@ -29,14 +29,21 @@ jobs:
     needs: build
 
     steps:
-      - name: Prepare SSH Key for Deployment
+      # Step 1: Prepare SSH Key for Deployment
+      - name: Prepare SSH Key
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
         run: |
           printf "%s" "$SSH_PRIVATE_KEY" > key.pem
           chmod 600 key.pem
 
-      - name: Deploy to VPS
-        run: |
-          scp -i key.pem -o StrictHostKeyChecking=no -r dist/* root@172.236.1.252:/var/www/MiManager_project_management
-          rm key.pem
+      # Step 2: Deploy to server
+      - name: Deploy to server
+        uses: easingthemes/ssh-deploy@v2.1.5
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          ARGS: "-rltgoDzvO --delete"
+          SOURCE: "dist/"
+          REMOTE_HOST: "172.236.1.252"
+          REMOTE_USER: "root" # Replace with your actual username if not root
+          TARGET: "/var/www/MiManager_project_management/dist"
