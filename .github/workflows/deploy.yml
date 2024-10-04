@@ -29,9 +29,6 @@ jobs:
     needs: build
 
     steps:
-      - name: Copy files to server via SSH
+      - name: Copy files to server via SCP
         uses: appleboy/scp-action@v0.1.0
-        env:
-          HOST: ${{ secrets.REMOTE_HOST }}
-          USERNAME: root
-          PASSWORD: ${{ secrets.SSH_PASSWORD}}
+        with:
