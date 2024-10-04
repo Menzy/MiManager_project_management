@@ -31,9 +31,9 @@ jobs:
     steps:
       - name: Deploy to VPS
         env:
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          SSH_PRIVATE_KEY_BASE64: ${{ secrets.SSH_PRIVATE_KEY_BASE64 }}
         run: |
-          printf "%s" "$SSH_PRIVATE_KEY" > key.pem
+          echo "$SSH_PRIVATE_KEY_BASE64" | base64 -d > key.pem
           chmod 600 key.pem
           scp -i key.pem -o StrictHostKeyChecking=no -r dist/* root@78.141.243.243:/var/www/MiManager_project_management/dist
           rm key.pem
