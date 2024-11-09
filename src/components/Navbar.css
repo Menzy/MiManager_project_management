@@ -18,6 +18,10 @@
   align-items: center;
   margin-right: auto;
 }
+.navbar .logo .logo-content {
+  display: flex;
+  align-items: center;
+}
 .navbar .logo img {
   margin-right: 10px;
   filter: invert(25%);
